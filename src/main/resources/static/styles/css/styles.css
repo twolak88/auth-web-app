@@ -1,0 +1,64 @@
+body {
+    background-color: lightblue;
+}
+.active {
+	font-weight: bold;
+	pointer-events: none;
+	cursor: default;
+}
+.pagination {
+	font-style: italic;
+}
+.pagenum {
+	padding: 5px;
+}
+.menu {
+	background-color: aqua;	
+}
+.error {
+	color: red;
+	font-style: italic;
+	font-size: small;
+}
+input.error {
+	background-color: #FFE6E6;
+}
+.errors {
+	background-color: #FFE6E6;
+	border: 1px solid red;
+	color: red;
+}
+.formtable {
+	display: grid;
+	width: 800px;
+	/*background-color: #eee;
+	border: 1px solid #666666;*/
+	border-spacing: 5px;
+}
+.formrow {
+	/*display: table-row;*/
+	width: 100%;
+	clear: both;
+}
+.formcell {
+	float: left; /* fix for  buggy browsers */
+	/*display: table-column;*/
+	padding: 1pt;
+	/*width: 28%;*/
+	/*background-color: #ccc;*/
+}
+label.formcell {
+	width: 10%;
+	padding-left: 10px;
+}
+input.formcell {
+	width: 20%;
+	padding-left: 1px;
+}
+span.formcell {
+	width: 59%;
+	padding-left: 10px;
+}
+.headlogin {
+	float: right;
+}

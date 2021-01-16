@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	<head>
+		<meta charset="ISO-8859-1"/>
+        <title>Header</title>
+	</head>
+	<body>
+		<div class="header" th:fragment="header">
+			<div class=headlogin>
+				<span sec:authorize="isAnonymous()" th:text="#{header.not.authenticated}"/>
+				<span sec:authorize="isAuthenticated()" th:text="#{header.authenticated(${#authentication.getPrincipal().getUsername()})}"/>
+				<span sec:authorize="isAuthenticated()" th:text="#{header.authenticated.roles(${#authentication.getPrincipal().getAuthorities()})}"/>
+				
+				<a sec:authorize="isAnonymous()" th:href="@{/register}" th:text="#{header.reg}" /> 
+				<a sec:authorize="isAnonymous()" th:href="@{/login}" th:text="#{header.login}" /> 
+				<a sec:authorize="isAuthenticated()" th:href="@{/logout}" th:text="#{header.logout}" />
+			</div>
+			<span th:text="#{header.title}" />
+		</div>
+	</body>
+</html>

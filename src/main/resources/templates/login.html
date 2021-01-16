@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	layout:decorator="page">
+ 	<div layout:fragment="content" onload="document.loginform.username.focus();">
+		<h1 th:text="#{login.title}"></h1>
+		
+		<div class="errors" th:if="${errorMessge != null && !errorMessge.isEmpty()}" th:text="${errorMessge}"/>
+		
+		<form name="loginform" th:action="@{/login}" method="POST">
+			<div th:class="formtable">
+ 				<div th:class="formrow">
+ 					<label class="formcell" th:text="#{login.login}" />
+ 					<input type="text" name="username" class="formcell" value="" />
+ 				</div>
+ 				<div th:class="formrow">
+ 					<label class="formcell" th:text="#{login.passwd}" />
+ 					<input type="password" name="password" class="formcell" value="" />
+ 				</div>
+ 				<div th:class="formrow">
+ 					<input id="remember_me" name="custom-remember-me" type="checkbox" />
+ 					<label for="remember_me" th:text="#{login.remember.me}"/>
+ 				</div>
+ 			</div>
+ 			<button name="submit" type="submit" th:text="#{login.submit}" />
+		</form>
+ 	</div>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	layout:decorator="page">
+ 	<div layout:fragment="content">
+ 		<h1 th:text="#{posts.title}"></h1>
+		<table>
+ 			<thead>
+ 				<tr>
+ 					<td th:text="#{posts.topic}" />
+ 					<td th:text="#{posts.owner}" />
+ 					<td th:text="#{posts.regdt}" />
+ 					<td th:text="#{posts.delete.label}" />
+ 				</tr>
+ 			</thead>
+ 			<tbody>
+ 				<tr th:each="post, i : ${pageContent.content}"
+ 					th:alt-title="${i.even}? 'even' : 'odd'">
+ 					<td><a th:href="@{'/posts/post/'+${post.getId()}}" th:text="${post.getTopic()}" ></a></td>
+ 					<td th:text="${post.getOwner()}"/>
+ 					<td th:text="${post.getCreationDatetime()}" />
+ 					<td>
+ 						<form th:action="@{/delete}" method="post">
+							<input type="hidden" id="postId" name="postId" th:value="${post.getId()}">
+							<button type="submit" class="btn" th:classappend="btn-del" th:text="#{posts.delete}" ></button>
+						</form>
+ 					</td>
+ 				</tr>
+ 			</tbody>
+ 		</table>
+ 		<div th:replace="fragments/pagenav :: pagination">Page navigation</div>
+	</div>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<meta charset="ISO-8859-1"/>
+		<title>Posts</title>
+        <link rel="stylesheet" type="text/css" media="screen" th:href="@{/styles/css/styles.css}"/>
+	</head>
+	<body>
+		<div th:replace="fragments/header :: header">HEADER</div>
+		<div th:replace="fragments/menu :: menu">MENU</div>
+		<div class="container">
+			<div layout:fragment="content">
+				content
+			</div>
+		</div>
+		<div th:replace="fragments/footer :: footer">FOOTER</div>
+	</body>
+</html>

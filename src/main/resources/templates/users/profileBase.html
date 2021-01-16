@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	layout:decorator="page">
+ 	<div layout:fragment="content">
+ 		<h1 th:text="#{users.userprofile(${user.getUserName()})}"/>
+		<span th:text="#{users.userprofile.login(${user.getUserName()})}"/><br/>
+ 		<span th:text="#{users.userprofile.name(${user.getUserFirstName()},${user.getUserLastName()})}"/><br/>
+ 		<span th:text="#{users.userprofile.regdate(${user.getUserRegistrationDate()})}"/><br/>
+ 		<span th:text="${user.getIsActive()} ? #{users.userprofile.active} : #{users.userprofile.inactive}" /><br/>
+ 		<div class="roles" th:if="${user.getRoles().size() > 0}">
+ 			<span th:text="#{users.userprofile.roles}"/><br/>
+			<table>
+				<tr th:each="role : ${user.getRoles()}">
+					<td><span th:text="${role.getRole()}" /></td>
+					<td>
+						<form th:action="@{'/users/role/remove/'+${user.getId()}}" th:object="${remRole}" method="post">
+							<input type="hidden" name="id" th:value="${role.getId()}">
+							<button type="submit" class="btn" th:classappend="btn-del" th:text="#{users.userprofile.auth.remove}"/>
+						</form>
+					</td>
+				</tr>
+			</table>
+ 		</div>
+		<div class="addrole">
+			<div layout:fragment="addrole">
+			</div>
+		</div>
+ 	</div>
+</html>

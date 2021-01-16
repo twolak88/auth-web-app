@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	<head>
+		<meta charset="ISO-8859-1"/>
+        <title>nav</title>
+	</head>
+	<body>
+		<div class="pagination" th:fragment="pagination">
+			<div class="pagesettings">
+	  			<select class="pagecontrol" id="pageSizeSelect">
+	     			<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+	                	th:value="${pageSize}"
+	                	th:selected="${pageSize} == ${pageContent.size}"></option>
+	    		</select>
+			</div>
+			<div class="pagenav">
+		 		<div th:if="${pageContent.totalPages > 0}" class="pagination">
+		 			<a th:if="${!pageContent.isFirst()}"
+		 				th:href="@{${link}(size=${pageContent.size}, page=1)}" 
+		 				th:text=#{page.navigate.first} class="pagenum" ></a>
+		 			<a th:if="${!pageContent.isFirst()}"
+		 				th:href="@{${link}(size=${pageContent.size}, page=${pageContent.number})}" 
+		 				th:text=#{page.navigate.previous} class="pagenum" ></a>
+		    		<a th:each="page : ${#numbers.sequence(1, pageContent.totalPages)}" th:href="@{${link}(size=${pageContent.size}, page=${page})}"
+		        		th:text=${page}
+		        		class="pagenum" th:classappend="${page==pageContent.number + 1} ? active"></a>
+		        	<a th:if="${!pageContent.isLast()}"
+		        		th:href="@{${link}(size=${pageContent.size}, page=${pageContent.number + 2})}" 
+		 				th:text=#{page.navigate.next} class="pagenum" ></a>
+		        	<a th:if="${!pageContent.isLast()}"
+		        		th:href="@{${link}(size=${pageContent.size}, page=${pageContent.totalPages})}" 
+		 				th:text=#{page.navigate.last} class="pagenum" ></a>
+				</div>
+			</div>
+			<script th:inline="javascript"><![CDATA[
+                $(document).ready(function() {
+					changePageAndSize();});
+                
+				function changePageAndSize() {
+					$('#pageSizeSelect').change(function(evt) {
+						window.location.replace("/?size=" + this.value + "&page=1");
+					});
+				}
+      			]]>
+			</script>
+		</div>
+	</body>
+</html>

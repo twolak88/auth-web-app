@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	layout:decorator="users/profileBase">
+ 	<div layout:fragment="addrole">
+ 		<form method="post" th:action="@{'/users/role/add/'+${user.getId()}}" th:object="${user}" >
+ 			<input type="hidden" th:field="*{id}" />
+  			<select th:field="*{roles}" multiple="multiple">
+    			<option th:each="role : ${availableRoles}"
+            		th:value="${{role}}" th:text="${role.getRole()}">
+    			</option>
+			</select><br/>
+			<button type="submit" th:text="#{users.userprofile.auth.submit}" />
+		</form>
+	</div>
+</html>

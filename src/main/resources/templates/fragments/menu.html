@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	<head>
+		<meta charset="ISO-8859-1"/>
+        <title>Menu</title>
+	</head>
+	<body>
+		<div class="menu" th:fragment="menu">
+			<ul>
+				<li sec:authorize-url="/"><a th:href="@{/}" th:text="#{menu.home}"></a></li>
+				<li sec:authorize-url="/posts"><a th:href="@{/posts/list}" th:text="#{menu.posts}"></a></li>
+				<li sec:authorize-url="/posts/add"><a th:href="@{/posts/new}" th:text="#{menu.posts.new}"></a></li>
+				<li sec:authorize-url="/users"><a th:href="@{/users}" th:text="#{menu.users}"></a></li>
+			</ul>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	layout:decorator="page">
+ 	<div layout:fragment="content">
+ 		<h1 th:text="#{users.reg.title}"></h1>
+ 		<form method="post" th:action=@{/register} th:object="${user}">
+ 			<div class="errors" th:if="${#fields.hasErrors('*')}">
+ 				<ul>
+ 					<li th:each="err : ${#fields.errors('*')}" th:text="${err}" />
+ 				</ul>
+ 			</div>
+ 			<div th:class="formtable">
+ 				<div th:class="formrow">
+		 			<label class="formcell" th:classappend="${#fields.hasErrors('userName')} ? 'error'" th:text="#{users.reg.login}"></label>
+		 			<input type="text" th:field="*{userName}" class="formcell" th:classappend="${#fields.hasErrors('userName')} ? 'error'" />
+		  			<span th:each="error : ${#fields.errors('userName')}" th:text="${error}" class="formcell" th:classappend="${#fields.hasErrors('userName')} ? 'error'"></span>
+	 			</div>
+	 			<div th:class="formrow">
+		 			<label class="formcell" th:classappend="${#fields.hasErrors('userEmail')} ? 'error'" th:text="#{users.reg.email}"></label>
+		 			<input type="text" th:field="*{userEmail}" class="formcell" th:classappend="${#fields.hasErrors('userEmail')} ? 'error'" />
+		 			<span th:each="error : ${#fields.errors('userEmail')}" th:text="${error}" class="formcell" th:classappend="${#fields.hasErrors('userEmail')} ? 'error'"></span>
+	 			</div>
+	 			<div th:class="formrow">
+		 			<label class="formcell" th:classappend="${#fields.hasErrors('userFirstName')} ? 'error'" th:text="#{users.reg.firstname}"></label>
+		 			<input type="text" th:field="*{userFirstName}" class="formcell" th:classappend="${#fields.hasErrors('userFirstName')} ? 'error'" />
+		 			<span th:each="error : ${#fields.errors('userFirstName')}" th:text="${error}" class="formcell" th:classappend="${#fields.hasErrors('userFirstName')} ? 'error'"></span>
+	 			</div>
+	 			<div th:class="formrow">
+		 			<label class="formcell" th:classappend="${#fields.hasErrors('userLastName')} ? 'error'" th:text="#{users.reg.lastname}"></label>
+		 			<input type="text" th:field="*{userLastName}" class="formcell" th:classappend="${#fields.hasErrors('userLastName')} ? 'error'" />
+		 			<span th:each="error : ${#fields.errors('userLastName')}" th:text="${error}" class="formcell" th:classappend="${#fields.hasErrors('userLastName')} ? 'error'"></span>
+	 			</div>
+	 			<div th:class="formrow">
+		 			<label class="formcell" th:classappend="${#fields.hasErrors('userPassword')} ? 'error'" th:text="#{users.reg.passwd}"></label>
+		 			<input type="password" th:field="*{userPassword}" class="formcell" th:classappend="${#fields.hasErrors('userPassword')} ? 'error'" />
+		 			<span th:each="error : ${#fields.errors('userPassword')}" th:text="${error}" class="formcell" th:classappend="${#fields.hasErrors('userPassword')} ? 'error'"></span>
+		 		</div>
+ 			</div>
+ 			<button type="submit" th:text="#{users.reg.submit}"></button>
+ 		</form>
+ 	</div>
+</html>
