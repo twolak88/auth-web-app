@@ -23,7 +23,7 @@ public class PostServiceImpl implements PostService {
         this.postRepository = postRepository;
     }
     
-	@PreAuthorize("isAuthenticated()")
+//	@PreAuthorize("isAuthenticated()")
 	@Override
 	public Page<Post> findPaginated(Pageable pageable) {
 		return this.postRepository.findAll(pageable);
@@ -35,9 +35,10 @@ public class PostServiceImpl implements PostService {
 		return this.postRepository.findById(id).get();
 	}
 	
-    @PreAuthorize("hasRole(T(com.twolak.spring.posts.config.Globals.Roles).ROLE_USER) and #post.message.length() <= 20"
-    		+ " or hasRole(T(com.twolak.spring.posts.config.Globals.Roles).ROLE_PREMIUM) "
-    		+ " or hasRole(T(com.twolak.spring.posts.config.Globals.Roles).ROLE_ADMIN)")
+    @PreAuthorize("hasRole(T(com.twolak.springframework.authwebapp.config.Globals.Roles).ROLE_USER) "
+            + " and #post.message.length() <= 20"
+    		+ " or hasRole(T(com.twolak.springframework.authwebapp.config.Globals.Roles).ROLE_PREMIUM) "
+    		+ " or hasRole(T(com.twolak.springframework.authwebapp.config.Globals.Roles).ROLE_ADMIN)")
 	@Override
 	public Post savePost(Post post) {
 		return this.postRepository.save(post);

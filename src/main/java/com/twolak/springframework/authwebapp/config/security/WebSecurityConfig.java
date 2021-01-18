@@ -65,7 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     		//access
 //    			.antMatchers("/**").hasAnyAuthority(RoleType.ROLE_USER.toString() + "," + RoleType.ROLE_ADMIN.toString())
     			.antMatchers("/users/**").hasAuthority(Globals.Roles.ROLE_ADMIN)
-    			.antMatchers("/login/**", "/register/**", "/", "/home", "/css/**", "/h2-console/**").permitAll()
+                .regexMatchers("/posts/((?!list).*|list\\w+)").hasAnyAuthority(Globals.Roles.ROLE_ADMIN, Globals.Roles.ROLE_PREMIUM, Globals.Roles.ROLE_USER)
+    			.antMatchers("/", "/home", "/login/**", "/register/**", "/css/**", "/h2-console/**", "/posts/list").permitAll()
 //    			.anyRequest().permitAll()
     		
     		//https

@@ -63,7 +63,7 @@ public class PostController {
 	}
 	
 	@GetMapping(value = "/post/{postId}")
-	public String showUserProfile(@PathVariable Long postId, Model model) {
+	public String showPost(@PathVariable Long postId, Model model) {
 		model.addAttribute("post", this.postFacade.findPostById(postId));
 		model.addAttribute("comment", this.postFacade.getEmptyComment());
 		return POST_VIEW;
