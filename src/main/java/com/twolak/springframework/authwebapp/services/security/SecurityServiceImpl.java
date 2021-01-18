@@ -38,10 +38,10 @@ public class SecurityServiceImpl implements UserDetailsService, SecurityService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = this.userService.findUserByUserName(username);
-        user.getRoles().size(); //not elegant - lazy loading no session
         if (user == null) {
             throw new UsernameNotFoundException("User not found.");
         }
+        user.getRoles().size(); //not elegant - lazy loading no session
         return new UserDetailsImpl(user);
 	}
 
