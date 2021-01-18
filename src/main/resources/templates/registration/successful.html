@@ -3,6 +3,6 @@
  	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  	layout:decorator="page">
  	<div layout:fragment="content">
- 		<h1 th:text="#{registration.successful(${user.getUserName()}, ${user.getUserRegistrationDate()})}"></h1>
+        <h5 class="card-title" th:text="#{registration.successful(${user.getUserName()}, ${user.getUserRegistrationDate()})}"></h5>
  	</div>
 </html>

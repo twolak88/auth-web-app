@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
  	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  	layout:decorator="page">
  	<div layout:fragment="content">
- 		<h1 th:text="#{users.title}"></h1>
- 		<table>
- 			<thead>
- 				<tr>
- 					<td th:text="#{users.username}" />
- 					<td th:text="#{users.userfullname}" />
- 					<td th:text="#{users.regdt}" />
- 					<td th:text="#{users.delete.label}" />
- 				</tr>
- 			</thead>
- 			<tbody>
- 				<tr th:each="user, i : ${pageContent.content}"
- 					th:alt-title="${i.even}? 'even' : 'odd'">
- 					<td><a th:href="@{'/users/profile/'+${user.getId()}}" th:text="${user.getUserName()}"></a></td>
- 					<td th:text="${user.getUserFirstName() + ' ' + user.getUserLastName()}"/>
- 					<td th:text="${user.getUserRegistrationDate()}" />
- 					<td>
- 						<form th:action="@{/users/delete}" method="post">
-							<input type="hidden" id="userId" name="userId" th:value="${user.getId()}">
-							<button type="submit" class="btn" th:classappend="btn-del" th:text="#{users.delete}"></button>
-						</form>
- 					</td>
- 				</tr>
- 			</tbody>
- 		</table>
- 		<div th:replace="fragments/pagenav :: pagination">Page navigation</div>
+        <h5 class="card-title" th:text="#{users.title}"></h5>
+        <div class="card-text">
+            <table>
+                <thead>
+                    <tr>
+                        <td th:text="#{users.username}" />
+                        <td th:text="#{users.userfullname}" />
+                        <td th:text="#{users.regdt}" />
+                        <td th:text="#{users.delete.label}" />
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user, i : ${pageContent.content}"
+                        th:alt-title="${i.even}? 'even' : 'odd'">
+                        <td><a th:href="@{'/users/profile/'+${user.getId()}}" th:text="${user.getUserName()}"></a></td>
+                        <td th:text="${user.getUserFirstName() + ' ' + user.getUserLastName()}"/>
+                        <td th:text="${user.getUserRegistrationDate()}" />
+                        <td>
+                            <form th:action="@{/users/delete}" method="post">
+                                <input type="hidden" id="userId" name="userId" th:value="${user.getId()}">
+                                <button type="submit" class="btn" th:classappend="btn-del" th:text="#{users.delete}"></button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div th:replace="fragments/pagenav :: pagination">Page navigation</div>
+        </div>
 	</div>
 </html>

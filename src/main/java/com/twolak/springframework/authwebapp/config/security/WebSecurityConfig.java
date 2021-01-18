@@ -86,8 +86,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //            .and().sessionManagement().sessionFixation().none() 
 
         //for h2-console
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
+//        http.csrf().disable();
+//        http.headers().frameOptions().disable();
             
 //    		.and().httpBasic().realmName("Posts");
     }

@@ -3,17 +3,37 @@
  	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	<head>
 		<meta charset="ISO-8859-1"/>
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+        
 		<title>Posts</title>
         <link rel="stylesheet" type="text/css" media="screen" th:href="@{/styles/css/styles.css}"/>
 	</head>
 	<body>
-		<div th:replace="fragments/header :: header">HEADER</div>
-		<div th:replace="fragments/menu :: menu">MENU</div>
-		<div class="container">
-			<div layout:fragment="content">
-				content
-			</div>
-		</div>
-		<div th:replace="fragments/footer :: footer">FOOTER</div>
+        <div class="card text-left border-dark">
+            <div class="card-header text-white bg-dark">
+                <div th:replace="fragments/header :: header">HEADER</div>
+            </div>
+            <div class="card text-left border-dark">
+                <div class="card-header bg-dark">
+                    <div th:replace="fragments/menu :: menu">MENU</div>
+                </div>
+                <div class="container">
+                    <div layout:fragment="content">
+                        content
+                    </div>
+                </div>
+            </div>
+            <div th:replace="fragments/footer :: footer">FOOTER</div>
+        </div>
 	</body>
 </html>

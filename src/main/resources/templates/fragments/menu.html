@@ -7,12 +7,24 @@
 	</head>
 	<body>
 		<div class="menu" th:fragment="menu">
-			<ul>
-				<li sec:authorize-url="/"><a th:href="@{/}" th:text="#{menu.home}"></a></li>
-				<li sec:authorize-url="/posts"><a th:href="@{/posts/list}" th:text="#{menu.posts}"></a></li>
-				<li sec:authorize-url="/posts/add"><a th:href="@{/posts/new}" th:text="#{menu.posts.new}"></a></li>
-				<li sec:authorize-url="/users"><a th:href="@{/users}" th:text="#{menu.users}"></a></li>
-			</ul>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active" sec:authorize-url="/">
+                            <a class="nav-link" th:href="@{/}" th:text="#{menu.home}"><span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item" sec:authorize-url="/posts">
+                            <a class="nav-link" th:href="@{/posts/list}" th:text="#{menu.posts}"></a>
+                        </li>
+                        <li class="nav-item" sec:authorize-url="/posts/add">
+                            <a class="nav-link" th:href="@{/posts/new}" th:text="#{menu.posts.new}"></a>
+                        </li>
+                        <li class="nav-item" sec:authorize-url="/users">
+                            <a class="nav-link" th:href="@{/users}" th:text="#{menu.users}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 		</div>
 	</body>
 </html>
