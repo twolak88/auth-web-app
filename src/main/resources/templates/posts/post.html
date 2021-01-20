@@ -8,8 +8,16 @@
             <span th:text="${post.message}"></span><br/>
             <span th:text="#{post.owner(${post.owner.userName})}"></span><br/>
             <span th:text="#{post.regdate(${post.creationDatetime})}"></span><br/>
+            <span th:text="#{post.comments.label}">Comments:</span>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-light" th:each="comm : ${post.comments}">
+                    <span th:text="${comm.message}"></span><br/>
+                    <span th:text="#{post.owner(${comm.owner.userName})}"></span><br/>
+                    <span th:text="#{post.regdate(${comm.creationDatetime})}"></span><br/>
+                </li>
+            </ul>
 
-            <form method="post" th:action="@{'/posts/post/'+${post.id}}" th:object="${comment}">
+            <form method="post" th:action="@{'/posts/post/'+${post.id}+'/comment'}" th:object="${comment}">
                 <div class="errors" th:if="${#fields.hasErrors('*')}">
                     <ul>
                         <li th:each="err : ${#fields.errors('*')}" th:text="${err}" />

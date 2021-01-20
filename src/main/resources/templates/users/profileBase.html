@@ -16,7 +16,7 @@
                         <td><span th:text="${role.getRole()}" /></td>
                         <td>
                             <form th:action="@{'/users/role/remove/'+${user.getId()}}" th:object="${remRole}" method="post">
-                                <input type="hidden" name="id" th:value="${role.getId()}">
+                                <input type="hidden" name="id" th:value="${role.getId()}"/>
                                 <button type="submit" class="btn" th:classappend="btn-del" th:text="#{users.userprofile.auth.remove}"/>
                             </form>
                         </td>

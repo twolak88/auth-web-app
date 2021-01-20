@@ -175,3 +175,4 @@ Desktop.ini
 hs_err_pid*
 release.properties
 .attach_pid*
+/ehcache/**

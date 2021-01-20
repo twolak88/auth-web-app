@@ -1,24 +1,26 @@
 package com.twolak.springframework.authwebapp.formatters;
 
-import com.twolak.springframework.authwebapp.domain.Role;
+import com.twolak.springframework.authwebapp.web.model.RoleDto;
 import java.text.ParseException;
 import java.util.Locale;
 import org.springframework.format.Formatter;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author twolak
  */
-public class AuthorityFormatter implements Formatter<Role> {
+@Component
+public class AuthorityFormatter implements Formatter<RoleDto> {
 
 	@Override
-	public String print(Role authority, Locale locale) {
+	public String print(RoleDto authority, Locale locale) {
 		return authority.getId().toString();
 	}
 
 	@Override
-	public Role parse(String authorityId, Locale locale) throws ParseException {
-		Role authority = new Role();
+	public RoleDto parse(String authorityId, Locale locale) throws ParseException {
+		RoleDto authority = new RoleDto();
 		authority.setId(Long.parseLong(authorityId));
 		return authority;
 	}

@@ -1,6 +1,5 @@
 package com.twolak.springframework.authwebapp.web.model;
 
-import com.twolak.springframework.authwebapp.domain.Role;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
@@ -51,7 +50,7 @@ public class UserDto implements Serializable{
 	
 	private Boolean isActive;
 	
-	private Set<Role> roles = new HashSet<>();
+	private Set<RoleDto> roles = new HashSet<>();
 	
 	private Set<PostDto> posts = new HashSet<>();
 	

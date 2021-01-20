@@ -17,4 +17,5 @@ public interface PostFacade {
 	void deletePost(Long postId);
 	PostDto getEmptyPost();
 	CommentDto getEmptyComment();
+    PostDto saveComment(Long postId, CommentDto comment);
 }

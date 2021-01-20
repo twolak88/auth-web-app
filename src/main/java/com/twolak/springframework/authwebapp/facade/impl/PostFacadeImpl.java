@@ -1,10 +1,12 @@
 package com.twolak.springframework.authwebapp.facade.impl;
 
 import com.twolak.springframework.authwebapp.config.Globals;
+import com.twolak.springframework.authwebapp.domain.Comment;
 import com.twolak.springframework.authwebapp.domain.Post;
 import com.twolak.springframework.authwebapp.facade.PostFacade;
 import com.twolak.springframework.authwebapp.services.PostService;
-import com.twolak.springframework.authwebapp.services.SecurityService;
+import com.twolak.springframework.authwebapp.web.mappers.CommentMapper;
+import com.twolak.springframework.authwebapp.web.mappers.CycleAvoidingMappingContext;
 import com.twolak.springframework.authwebapp.web.mappers.PostMapper;
 import com.twolak.springframework.authwebapp.web.model.CommentDto;
 import com.twolak.springframework.authwebapp.web.model.PostDto;
@@ -25,38 +27,42 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostFacadeImpl implements PostFacade{
     
 	private final PostMapper postMapper;
+    private final CommentMapper commentMapper;
 	private final PostService postService;
-	private final SecurityService securityService;
-    
-    public PostFacadeImpl(PostMapper postMapper, PostService postService, SecurityService securityService) {
+    private final CycleAvoidingMappingContext cycleAvoidingMappingContext;
+
+    public PostFacadeImpl(PostMapper postMapper, CommentMapper commentMapper, PostService postService, CycleAvoidingMappingContext cycleAvoidingMappingContext) {
         this.postMapper = postMapper;
+        this.commentMapper = commentMapper;
         this.postService = postService;
-        this.securityService = securityService;
+        this.cycleAvoidingMappingContext = cycleAvoidingMappingContext;
     }
-	
-	@Transactional(propagation = Propagation.SUPPORTS)
+    
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
 	@Override
 	public Page<PostDto> findPaginated(Pageable pageable) {
-		return this.postService.findPaginated(pageable).map(this.postMapper::postToPostDto);
+		return this.postService.findPaginated(pageable).map(post -> {
+            return this.postMapper.postToPostDto(post, this.cycleAvoidingMappingContext);
+        });
 	}
 	
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
 	@Cacheable(key = "#id", cacheNames = {Globals.Caches.POSTS_CACHE}, sync = true)
 	@Override
 	public PostDto findPostById(Long id) {
-		return this.postMapper.postToPostDto(this.postService.findPostById(id));
+        Post post = this.postService.findPostById(id);
+		return this.postMapper.postToPostDto(post, this.cycleAvoidingMappingContext);
 	}
 	
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = Exception.class)
     @CachePut(key = "#result.id", cacheNames = {Globals.Caches.POSTS_CACHE})
 	@Override
 	public PostDto savePost(PostDto postDto) {
-		Post post = this.postMapper.postDtoToPost(postDto);
-		post.setOwner(this.securityService.getAuthenticatedUser());
-		return this.postMapper.postToPostDto(this.postService.savePost(post));
+		Post post = this.postMapper.postDtoToPost(postDto, this.cycleAvoidingMappingContext);
+		return this.postMapper.postToPostDto(this.postService.savePost(post), this.cycleAvoidingMappingContext);
 	}
     
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = Exception.class)
 	@CacheEvict(key = "#postId", cacheNames = {Globals.Caches.POSTS_CACHE})
 	@Override
 	public void deletePost(Long postId) {
@@ -72,4 +78,13 @@ public class PostFacadeImpl implements PostFacade{
 	public CommentDto getEmptyComment() {
 		return new CommentDto();
 	}
+    
+    @Transactional(propagation = Propagation.REQUIRED, noRollbackFor = Exception.class)
+    @CachePut(key = "#result.id", cacheNames = {Globals.Caches.POSTS_CACHE})
+    @Override
+    public PostDto saveComment(Long postId, CommentDto comment) {
+        Comment commentToSave = this.commentMapper.commentDtoToComment(comment);
+        return this.postMapper.postToPostDto(
+                this.postService.saveComment(postId, commentToSave), this.cycleAvoidingMappingContext);
+    }
 }

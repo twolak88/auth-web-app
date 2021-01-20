@@ -4,6 +4,7 @@ import com.twolak.springframework.authwebapp.domain.User;
 import com.twolak.springframework.authwebapp.services.CustomUserDetails;
 import com.twolak.springframework.authwebapp.services.SecurityService;
 import com.twolak.springframework.authwebapp.services.UserService;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -41,7 +42,8 @@ public class SecurityServiceImpl implements UserDetailsService, SecurityService{
         if (user == null) {
             throw new UsernameNotFoundException("User not found.");
         }
-        user.getRoles().size(); //not elegant - lazy loading no session
+        Hibernate.initialize(user.getRoles());
+//        user.getRoles().size(); //not elegant - lazy loading no session
         return new UserDetailsImpl(user);
 	}
 

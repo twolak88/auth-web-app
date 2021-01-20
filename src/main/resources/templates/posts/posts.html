@@ -18,11 +18,11 @@
                     <tr th:each="post, i : ${pageContent.content}"
                         th:alt-title="${i.even}? 'even' : 'odd'">
                         <td><a th:href="@{'/posts/post/'+${post.getId()}}" th:text="${post.getTopic()}" ></a></td>
-                        <td th:text="${post.getOwner()}"/>
+                        <td th:text="${post.getOwner().userName}"/>
                         <td th:text="${post.getCreationDatetime()}" />
                         <td>
                             <form th:action="@{/delete}" method="post">
-                                <input type="hidden" id="postId" name="postId" th:value="${post.getId()}">
+                                <input type="hidden" id="postId" name="postId" th:value="${post.getId()}"/>
                                 <button type="submit" class="btn" th:classappend="btn-del" th:text="#{posts.delete}" ></button>
                             </form>
                         </td>

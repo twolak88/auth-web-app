@@ -2,6 +2,7 @@ package com.twolak.springframework.authwebapp.web.controllers;
 
 import com.twolak.springframework.authwebapp.config.Globals;
 import com.twolak.springframework.authwebapp.facade.PostFacade;
+import com.twolak.springframework.authwebapp.web.model.CommentDto;
 import com.twolak.springframework.authwebapp.web.model.PostDto;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -56,8 +57,8 @@ public class PostController {
 	}
 	
 	@PostMapping(value = "/delete")
-	public String deletePost(Model model,
-			@ModelAttribute("userId") Long postId) {
+	public String deletePost(@ModelAttribute("userId") Long postId,
+            Model model) {
 		this.postFacade.deletePost(postId);
 		return REDIRECT_POSTS;
 	}
@@ -76,7 +77,7 @@ public class PostController {
 	}
 	
 	@PostMapping("/new")
-	public String processNewPost(Model model, @Valid @ModelAttribute("post") PostDto post,
+	public String processNewPost(@Valid @ModelAttribute("post") PostDto post, Model model,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			return NEW_POST_FORM_VIEW;
@@ -84,4 +85,15 @@ public class PostController {
 		post = this.postFacade.savePost(post);
 		return REDIRECT_SUCESS + post.getId();
 	}
+    
+    @PostMapping(value = "/post/{postId}/comment")
+    public String processComment(@PathVariable Long postId, 
+            @Valid @ModelAttribute("comment") CommentDto comment, 
+            Model model, BindingResult result) {
+        if (result.hasErrors()) {
+            return NEW_POST_FORM_VIEW;
+        }
+        PostDto post = this.postFacade.saveComment(postId, comment);
+        return REDIRECT_SUCESS + post.getId();
+    }
 }

@@ -1,9 +1,12 @@
 package com.twolak.springframework.authwebapp.services.impl;
 
 import com.twolak.springframework.authwebapp.config.Globals.Roles;
+import com.twolak.springframework.authwebapp.domain.Comment;
 import com.twolak.springframework.authwebapp.domain.Post;
+import com.twolak.springframework.authwebapp.exceptions.NotFoundException;
 import com.twolak.springframework.authwebapp.repository.PostRepository;
 import com.twolak.springframework.authwebapp.services.PostService;
+import com.twolak.springframework.authwebapp.services.SecurityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
@@ -18,9 +21,11 @@ import org.springframework.stereotype.Service;
 public class PostServiceImpl implements PostService {
 	
 	private final PostRepository postRepository;
+    private final SecurityService securityService;
 
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository, SecurityService securityService) {
         this.postRepository = postRepository;
+        this.securityService = securityService;
     }
     
 //	@PreAuthorize("isAuthenticated()")
@@ -32,7 +37,8 @@ public class PostServiceImpl implements PostService {
     @PreAuthorize("isAuthenticated()")
 	@Override
 	public Post findPostById(Long id) {
-		return this.postRepository.findById(id).get();
+		return this.postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Post " + id + " doesn't exist"));
 	}
 	
     @PreAuthorize("hasRole(T(com.twolak.springframework.authwebapp.config.Globals.Roles).ROLE_USER) "
@@ -41,6 +47,7 @@ public class PostServiceImpl implements PostService {
     		+ " or hasRole(T(com.twolak.springframework.authwebapp.config.Globals.Roles).ROLE_ADMIN)")
 	@Override
 	public Post savePost(Post post) {
+        post.setOwner(this.securityService.getAuthenticatedUser());
 		return this.postRepository.save(post);
 	}
     
@@ -54,4 +61,14 @@ public class PostServiceImpl implements PostService {
 //	public Post getEmptyPost() {
 //		return new Post();
 //	}
+
+    @Override
+    public Post saveComment(Long postId, Comment comment) {
+        Post post = this.postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Post " + postId + " doesn't exist"));
+        comment.setOwner(this.securityService.getAuthenticatedUser());
+        post.getComments().add(comment);
+        comment.setPost(post);
+        return this.postRepository.save(post);
+    }
 }

@@ -7,7 +7,8 @@
  			<input type="hidden" th:field="*{id}" />
   			<select th:field="*{roles}" multiple="multiple">
     			<option th:each="role : ${availableRoles}"
-            		th:value="${{role}}" th:text="${role.getRole()}">
+            		th:value="${{role}}" 
+                    th:text="${role.getRole()}">
     			</option>
 			</select><br/>
 			<button type="submit" th:text="#{users.userprofile.auth.submit}" />
