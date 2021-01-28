@@ -4,6 +4,7 @@ import com.twolak.springframework.authwebapp.domain.Role;
 import com.twolak.springframework.authwebapp.repository.RolesRepository;
 import com.twolak.springframework.authwebapp.services.RoleService;
 import java.util.List;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,7 +37,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> findByIdIn(List<Long> roles) {
+    public Set<Role> findByIdIn(Set<Long> roles) {
         return this.rolesRepository.findByIdIn(roles);
     }
 

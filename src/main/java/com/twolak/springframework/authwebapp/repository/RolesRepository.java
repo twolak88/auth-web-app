@@ -1,7 +1,7 @@
 package com.twolak.springframework.authwebapp.repository;
 
 import com.twolak.springframework.authwebapp.domain.Role;
-import java.util.List;
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface RolesRepository extends JpaRepository<Role, Long> {
 	Role getRoleByRole(String role);
-	List<Role> findByIdIn(List<Long> roleIdList);
+    Set<Role> findByIdIn(Set<Long> roleIdList);
 }

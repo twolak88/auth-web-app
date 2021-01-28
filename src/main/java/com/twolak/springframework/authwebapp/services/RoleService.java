@@ -2,6 +2,7 @@ package com.twolak.springframework.authwebapp.services;
 
 import com.twolak.springframework.authwebapp.domain.Role;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -10,6 +11,6 @@ import java.util.List;
 public interface RoleService {
     Role getOrCreateRole(String role);
     Role findById(Long roleId);
-    List<Role> findByIdIn(List<Long> roles);
+    Set<Role> findByIdIn(Set<Long> roles);
     List<Role> findAll();
 }

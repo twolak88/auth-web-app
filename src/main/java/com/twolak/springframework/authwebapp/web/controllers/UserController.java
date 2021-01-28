@@ -1,8 +1,8 @@
 package com.twolak.springframework.authwebapp.web.controllers;
 
 import com.twolak.springframework.authwebapp.config.Globals;
-import com.twolak.springframework.authwebapp.domain.Role;
 import com.twolak.springframework.authwebapp.facade.UserFacade;
+import com.twolak.springframework.authwebapp.web.model.RoleDto;
 import com.twolak.springframework.authwebapp.web.model.UserDto;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,24 +57,16 @@ public class UserController {
 	
 	@PostMapping(value = "/delete")
 	public String deleteUser(Model model,
-			@ModelAttribute("userId") Long userId) {
-		this.userFacade.deleteUser(userId);
+			@ModelAttribute("user") UserDto user) {
+		this.userFacade.deleteUser(user.getId());
 		return REDIRECT_USERS;
-	}
-	
-	@PostMapping(value = "/role/remove/{userId}")
-	public String removeRole(Model model,
-			@ModelAttribute("remRole") Role authority,
-			@PathVariable Long userId,
-			BindingResult result) {
-		userId = this.userFacade.removeRole(userId, authority.getId()).getId();
-		return REDIRECT_PROFILE + userId;
 	}
 	
 	@GetMapping(value = "/profile/{userId}")
 	public String showUserProfile(@PathVariable Long userId, Model model) {
-		model.addAttribute("user", this.userFacade.findUserById(userId));
-		model.addAttribute("remRole", new Role());
+        UserDto user = this.userFacade.findUserById(userId);
+		model.addAttribute("user", user);
+		model.addAttribute("remRole", new RoleDto());
 		return USER_PROF_VIEW;
 	}
 	
@@ -85,6 +77,15 @@ public class UserController {
 		model.addAttribute("availableRoles", this.userFacade.getAvailableRoles(user));
 		return ADD_ROLE_VIEW;
 	}
+    
+    @PostMapping(value = "/role/remove/{userId}")
+    public String removeRole(Model model,
+            @ModelAttribute("remRole") RoleDto authority,
+            @PathVariable Long userId,
+            BindingResult result) {
+        userId = this.userFacade.removeRole(userId, authority.getId()).getId();
+        return REDIRECT_PROFILE + userId;
+    }
 	
 	@PostMapping(value = "/role/add/{userId}")
 	public String updateUserRoles(Model model, 

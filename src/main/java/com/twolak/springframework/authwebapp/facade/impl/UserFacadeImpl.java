@@ -1,6 +1,8 @@
 package com.twolak.springframework.authwebapp.facade.impl;
 
 import com.twolak.springframework.authwebapp.config.Globals;
+import com.twolak.springframework.authwebapp.domain.Role;
+import com.twolak.springframework.authwebapp.domain.User;
 import com.twolak.springframework.authwebapp.facade.UserFacade;
 import com.twolak.springframework.authwebapp.services.UserService;
 import com.twolak.springframework.authwebapp.web.mappers.CycleAvoidingMappingContext;
@@ -44,8 +46,9 @@ public class UserFacadeImpl implements UserFacade{
     @CachePut(key = "#result.id", cacheNames = {Globals.Caches.USERS_CACHE})
 	@Override
 	public UserDto saveUser(UserDto user) {
-		return this.userMapper.userToUserDto(this.userService.saveUser(
-				this.userMapper.userDtoToUser(user, this.cycleAvoidingMappingContext)), this.cycleAvoidingMappingContext);
+        User convertedUser = this.userMapper.userDtoToUser(user, this.cycleAvoidingMappingContext);
+        User savedUser = this.userService.saveUser(convertedUser);
+		return this.userMapper.userToUserDto(savedUser, this.cycleAvoidingMappingContext);
 	}
     
     @Transactional
@@ -54,15 +57,17 @@ public class UserFacadeImpl implements UserFacade{
     public UserDto registerUser(UserDto user) {
         user.setIsActive(Boolean.FALSE);
         user.setUserPassword(new BCryptPasswordEncoder().encode(user.getUserPassword()));
-        return this.userMapper.userToUserDto(this.userService.saveRegisteredUser(
-                this.userMapper.userDtoToUser(user, this.cycleAvoidingMappingContext)), this.cycleAvoidingMappingContext);
+        User convertedUser = this.userMapper.userDtoToUser(user, this.cycleAvoidingMappingContext);
+        User savedUser = this.userService.saveRegisteredUser(convertedUser);
+        return this.userMapper.userToUserDto(savedUser, this.cycleAvoidingMappingContext);
     }
 	
     @Transactional
 	@Cacheable(key = "#id", cacheNames = {Globals.Caches.USERS_CACHE}, sync = true)
 	@Override
 	public UserDto findUserById(Long id) {
-		return this.userMapper.userToUserDto(this.userService.findUserById(id), this.cycleAvoidingMappingContext);
+        User user = this.userService.findUserById(id);
+		return this.userMapper.userToUserDto(user, this.cycleAvoidingMappingContext);
 	}
 
 	@Override
@@ -80,27 +85,32 @@ public class UserFacadeImpl implements UserFacade{
 
 	@Override
 	public List<RoleDto> getAvailableRoles(UserDto user) {
-		return this.userService.getAvailableRoles(this.userMapper.userDtoToUser(user, this.cycleAvoidingMappingContext)).stream().map(this.roleMapper::roleToRoleDto).collect(Collectors.toList());
+        User convertedUser = this.userMapper.userDtoToUser(user, this.cycleAvoidingMappingContext);
+		return this.userService.getAvailableRoles(convertedUser).stream().map(this.roleMapper::roleToRoleDto).collect(Collectors.toList());
 	}
 	
 	@Transactional
 	@CachePut(key = "#userId", cacheNames = {Globals.Caches.USERS_CACHE})
 	@Override
 	public UserDto updateRoles(Long userId, Set<RoleDto> roles) {
-		return this.userMapper.userToUserDto(this.userService.updateRoles(userId, roles.stream().map(this.roleMapper::roleDtoToRole).collect(Collectors.toSet())), this.cycleAvoidingMappingContext);
+        Set<Role> convertedRoles = roles.stream().map(this.roleMapper::roleDtoToRole).collect(Collectors.toSet());
+        User user = this.userService.updateRoles(userId, convertedRoles);
+		return this.userMapper.userToUserDto(user, this.cycleAvoidingMappingContext);
 	}
 	
 	@Transactional
 	@CachePut(key = "#userId", cacheNames = {Globals.Caches.USERS_CACHE})
 	@Override
 	public UserDto removeRole(Long userId, Long role) {
-		return this.userMapper.userToUserDto(this.userService.removeRole(userId, role), this.cycleAvoidingMappingContext);
+        User user = this.userService.removeRole(userId, role);
+		return this.userMapper.userToUserDto(user, this.cycleAvoidingMappingContext);
 	}
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	@Override
 	public Page<UserDto> findPaginated(Pageable pageable) {
-		return this.userService.findPaginated(pageable).map(user -> {
+        Page<User> users = this.userService.findPaginated(pageable);
+		return users.map(user -> {
             return this.userMapper.userToUserDto(user, cycleAvoidingMappingContext);
         });
 	}

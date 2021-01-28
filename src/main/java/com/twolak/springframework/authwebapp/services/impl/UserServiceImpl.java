@@ -4,6 +4,7 @@ import com.twolak.springframework.authwebapp.config.Globals;
 import com.twolak.springframework.authwebapp.config.Globals.Roles;
 import com.twolak.springframework.authwebapp.domain.Role;
 import com.twolak.springframework.authwebapp.domain.User;
+import com.twolak.springframework.authwebapp.exceptions.NotFoundException;
 import com.twolak.springframework.authwebapp.repository.UserRepository;
 import com.twolak.springframework.authwebapp.services.RoleService;
 import com.twolak.springframework.authwebapp.services.UserService;
@@ -46,7 +47,8 @@ public class UserServiceImpl implements UserService {
     @Secured(Roles.ROLE_ADMIN)
     @Override
 	public User findUserById(Long id) {
-		return this.userRepository.findById(id).get();
+		return this.userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User " + id + " doesn't exist"));
 	}
     
 	@Override
@@ -74,9 +76,9 @@ public class UserServiceImpl implements UserService {
 	@Secured(Roles.ROLE_ADMIN)
 	@Override
 	public List<Role> getAvailableRoles(User user) {
-		Globals.RolesList.forEach(role->{
-            this.roleService.getOrCreateRole(role);
-		});
+//		Globals.RolesList.forEach(role->{
+//            this.roleService.getOrCreateRole(role);
+//		});
 		List<Role> availableAuthorities = this.roleService.findAll().stream()
 				.filter(role -> user.getRoles().stream().map(Role::getRole)
 						.noneMatch(r->r.equals(role.getRole())))
@@ -88,9 +90,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User updateRoles(Long userId, Set<Role> authorities) {
 		User user = this.userRepository.findById(userId).get();
-		List<Role> authorityList = this.roleService.findByIdIn(authorities.stream().map(Role::getId).collect(Collectors.toList()));
-		user.getRoles().addAll(authorityList);
-		this.userRepository.save(user);
+		Set<Role> loadedRoles = this.roleService.findByIdIn(authorities.stream().map(Role::getId).collect(Collectors.toSet()));
+		user.getRoles().addAll(loadedRoles);
+		user = this.userRepository.save(user);
 		return user;
 	}
 	
@@ -98,7 +100,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User removeRole(Long userId, Long roleId) {
 		User user = this.userRepository.findById(userId).get();
-		boolean ret = user.getRoles().remove(this.roleService.findById(roleId));
+        Role roleToRemove = this.roleService.findById(roleId);
+		boolean ret = user.getRoles().remove(roleToRemove);
 		if (ret)
 			user = this.userRepository.save(user);
 		return user;
